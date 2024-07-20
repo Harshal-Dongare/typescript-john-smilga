@@ -174,3 +174,218 @@ function processData(
 console.log(processData(10));
 console.log(processData("Hello"));
 console.log(processData("Hello", { reverse: true }));
+
+// ----------------------------------------------------------------------------
+
+//* TYPE ALIAS
+
+type User = { id: number; name: string; isActive: boolean }; // object type
+export type Age = number; // primitive type
+type StringOrNumber = string | number; // union type
+type Theme = "light" | "dark"; // literal type
+
+const john: User = {
+    id: 1,
+    name: "john",
+    isActive: true,
+};
+const susan: User = {
+    id: 1,
+    name: "susan",
+    isActive: false,
+};
+
+function createUser(user: User): User {
+    console.log(`Hello there ${user.name.toUpperCase()} !!!`);
+
+    return user;
+}
+
+//* CHALLENGE
+type Employee = { id: number; name: string; department: string };
+type Manager = { id: number; name: string; employees: Employee[] };
+type Staff = Employee | Manager;
+
+const harshal: Employee = { id: 1, name: "Harshal", department: "Sales" };
+const prajakta: Employee = { id: 2, name: "Prajakta", department: "Sales" };
+
+const bob: Manager = { id: 2, name: "Bob", employees: [harshal, prajakta] };
+
+function createStaffDetails(user: Staff): void {
+    if ("employees" in user) {
+        console.log(
+            `${user.name} is a Manager and  managing ${user.employees.length} employees`
+        );
+    } else {
+        console.log(
+            `${user.name} is an Employee and belongs to ${user.department}`
+        );
+    }
+}
+
+createStaffDetails(harshal);
+createStaffDetails(prajakta);
+createStaffDetails(bob);
+
+//* INTERSECTION TYPES
+type Book = { id: number; title: string; price: number };
+type Discount = { discount: number };
+
+const book1: Book = {
+    id: 1,
+    title: "The Hobbit",
+    price: 100,
+};
+
+const book2: Book = {
+    id: 2,
+    title: "The Lord of the Rings",
+    price: 180,
+};
+
+const discountedBook: Book & Discount = {
+    id: 3,
+    title: "The Shining",
+    price: 200,
+    discount: 15,
+};
+
+//* INTERFACE TYPE
+interface book {
+    readonly isbn: number;
+    title: string;
+    price: number;
+    author: string;
+    genre?: string;
+    // method
+    printAuthor(): void;
+    printTitle(message: string): string;
+    printSomething: (message: string) => number;
+}
+
+const deepWork: book = {
+    isbn: 9781455586691,
+    title: "Deep Work",
+    price: 15000,
+    author: "Cal Newport",
+    genre: "Self-help",
+    printAuthor: function () {
+        console.log(this.author);
+    },
+    printTitle(message: string): string {
+        return `${this.title} ${message}`;
+    },
+    printSomething(message: string): number {
+        return message.length;
+    },
+};
+
+deepWork.printAuthor();
+const result4 = deepWork.printTitle("is a great book");
+console.log(result4);
+
+//* CHALLENGE
+interface Computer {
+    readonly id: number;
+    brand: string;
+    ram: number;
+    storage?: number;
+    upgradeRam(increase: number): number;
+}
+
+const laptop: Computer = {
+    id: 121,
+    brand: "HP",
+    ram: 8,
+    storage: 256,
+    upgradeRam(increase: number): number {
+        return increase + this.ram;
+    },
+};
+
+const totalRam = laptop.upgradeRam(12);
+console.log(totalRam);
+
+//* MERGING INTERFACES
+interface Person {
+    name: string;
+    getDetails(): string;
+}
+
+interface DogOwner {
+    dogName: string;
+    getDogDetails(): string;
+}
+
+interface Person {
+    age: number;
+}
+
+const person: Person = {
+    name: "John",
+    age: 25,
+    getDetails(): string {
+        return `Name: ${this.name}, Age: ${this.age}`;
+    },
+};
+
+//* EXTENDING INTERFACES
+interface Person {
+    name: string;
+    getDetails(): string;
+}
+
+interface Employeee extends Person {
+    employeeId: number;
+}
+
+const employee: Employeee = {
+    name: "John",
+    employeeId: 123,
+    age: 25,
+    getDetails(): string {
+        return `Name: ${this.name}, Employee Id: ${this.employeeId}`;
+    },
+};
+
+//* CHALLENGE
+
+function getEmployee(): Person4 | DogOwner | Manager2 {
+    const random = Math.random();
+
+    if (random < 0.33) {
+        return {
+            name: "john",
+        };
+    } else if (random < 0.66) {
+        return {
+            name: "sarah",
+            dogName: "fido",
+        };
+    } else {
+        return {
+            name: "bob",
+            managePeople(): void {
+                console.log("manage people");
+            },
+            delegateTasks(): void {
+                console.log("delegate tasks");
+            },
+        };
+    }
+}
+interface Person4 {
+    name: string;
+}
+
+interface DogOwner extends Person {
+    dogName: string;
+}
+
+interface Manager2 extends Person {
+    managePeople(): void;
+    delegateTasks(): void;
+}
+
+const employeeeee: Person | DogOwner | Manager2 = getEmployee();
+console.log(employeeeee);
