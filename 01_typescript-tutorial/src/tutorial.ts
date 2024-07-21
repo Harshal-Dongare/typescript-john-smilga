@@ -350,7 +350,7 @@ const employee: Employeee = {
 
 //* CHALLENGE
 
-function getEmployee(): Person4 | DogOwner | Manager2 {
+function getEmployee(): Person4 | DogOwner2 | Manager2 {
     const random = Math.random();
 
     if (random < 0.33) {
@@ -378,14 +378,15 @@ interface Person4 {
     name: string;
 }
 
-interface DogOwner extends Person {
+interface DogOwner2 extends Person4 {
     dogName: string;
 }
 
-interface Manager2 extends Person {
+interface Manager2 extends Person4 {
     managePeople(): void;
     delegateTasks(): void;
 }
 
-const employeeeee: Person | DogOwner | Manager2 = getEmployee();
-console.log(employeeeee);
+const employeee: Person4 | DogOwner2 | Manager2 = getEmployee();
+console.log(employeee);
+
